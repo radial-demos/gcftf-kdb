@@ -5,10 +5,13 @@ const debug = require('debug')('kdb:app');
 
 debug('\x1Bc');
 
-const models = require('./models');
+const express = require('express');
+const path = require('path');
 
-const data = models.data.get({ nationId: 'brazil', jurisdictionId: 'acre' });
+const routes = require('./routes/');
 
-debug(data);
+const app = express();
 
-// models.content.get({ view })
+app.use('/', routes);
+
+module.exports = app;
