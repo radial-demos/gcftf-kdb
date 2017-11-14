@@ -5,6 +5,7 @@
   "main": "./bin/www",
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "node dev-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,6 +15,7 @@
   "author": "Darren Anderson",
   "license": "ISC",
   "devDependencies": {
+    "browser-sync": "2.18.13",
     "eslint": "4.11.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-plugin-import": "2.8.0",
