@@ -63,7 +63,28 @@ function get(props) {
   if (!props.nationId.length) {
     throw Error('Empty \'nationId\' value. The value of this property must be a non zero length string.');
   }
-  return dataFramework;
+  const nationItem = dataFramework.find(r => (r.id === props.nationId));
+  if (!nationItem) {
+    throw Error(`Nation not found. No nation with the id '${props.nationId}' has been defined in 'config/regions'.`);
+  }
+  if (!Object.prototype.hasOwnProperty.call(props, 'jurisdictionId')) {
+    return nationItem;
+  }
+  // find jurisdiction
+  if (typeof props.jurisdictionId !== 'string') {
+    throw Error('Non-string \'jurisdictionId\' value. The value of this property must be a string.');
+  }
+  if (!props.jurisdictionId.length) {
+    throw Error('Empty \'jurisdictionId\' value. The value of this property must be a non zero length string.');
+  }
+  if (!Array.isArray(nationItem.jurisdictions)) {
+    throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
+  }
+  const jurisdictionItem = nationItem.jurisdictions.find(r => (r.id === props.jurisdictionId));
+  if (!jurisdictionItem) {
+    throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
+  }
+  return jurisdictionItem;
 }
 
 dataFramework = getDataFramework();
