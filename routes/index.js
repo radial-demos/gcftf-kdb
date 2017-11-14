@@ -6,6 +6,6 @@ const site = require('./site');
 
 const router = Router();
 
-router.get('/:viewId?/:regionId?', site);
+router.get('/:viewId?/:nationId?/:jurisdictionId?', site);
 
 module.exports = router;
