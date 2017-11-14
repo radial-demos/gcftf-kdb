@@ -32,8 +32,11 @@ module.exports = (req, res, next) => {
         // next();
         // return;
       }
+      // includeviewDefinitions for all jurisdictional views for subnavigation
+      props.viewDefinitions = viewDefinitions.filter(r => (r.layout === 'jurisdictional'));
     }
-    Object.assign(props, dataProps); // merge dataProps into props
+    // merge dataProps into props
+    Object.assign(props, dataProps);
     try {
       props.data = models.data.get(dataProps);
     } catch (err) {
@@ -49,6 +52,6 @@ module.exports = (req, res, next) => {
       return;
     }
   }
-  // res.render(props.viewId, props);
-  res.end(JSON.stringify(props));
+  res.render(props.viewId, props);
+  // res.end(JSON.stringify(props));
 };
