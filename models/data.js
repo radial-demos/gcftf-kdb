@@ -53,6 +53,16 @@ function populateDataStructure() {
     });
   });
 }
+async function getValueRecs(filterSpec) {
+  try {
+    const db = await MongoClient.connect(DB_URL);
+    const valueRecs = await db.collection('data').find(filterSpec).toArray();
+    await db.close();
+    return valueRecs;
+  } catch (err) {
+    throw err;
+  }
+}
 function assertValidProps(props) {
   // nationId is required and must be a string of non-zero length
   if (!Object.prototype.hasOwnProperty.call(props, 'nationId')) {
@@ -95,11 +105,10 @@ async function get(props) {
       throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
     }
   }
-  // merge data values from database into each field defined in the structure
-  const db = await MongoClient.connect(DB_URL);
-  const data = await db.collection('data').find().toArray();
-  await db.close();
-  // debug(data.length);
+  const filterSpec = { nationId: props.nationId };
+  if (props.jurisdictionId) filterSpec.jurisdictionId = props.jurisdictionId;
+  const valueRecs = await getValueRecs(filterSpec);
+  // debug(valueRecs);
   return structureItem;
 }
 
