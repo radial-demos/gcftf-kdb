@@ -7,7 +7,7 @@ const models = require('../models');
 const viewDefinitions = require('../config/view-definitions');
 
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   const props = {};
   props.viewId = (req.params.viewId || '').toLowerCase().replace(/ |-|_/gi, '');
   if (['', 'home'].includes(props.viewId)) props.viewId = 'index';
@@ -32,13 +32,13 @@ module.exports = (req, res, next) => {
         // next();
         // return;
       }
-      // includeviewDefinitions for all jurisdictional views for subnavigation
+      // include viewDefinitions for all jurisdictional views for subnavigation
       props.viewDefinitions = viewDefinitions.filter(r => (r.layout === 'jurisdictional'));
     }
     // merge dataProps into props
     Object.assign(props, dataProps);
     try {
-      props.data = models.data.get(dataProps);
+      props.data = await models.data.get(dataProps);
     } catch (err) {
       throw Error(`Data Not Found ${JSON.stringify(dataProps)}`);
       // next();
@@ -46,7 +46,7 @@ module.exports = (req, res, next) => {
     }
   } else {
     try {
-      props.content = models.content.get();
+      props.content = await models.content.get();
     } catch (err) {
       next();
       return;
