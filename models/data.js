@@ -16,21 +16,24 @@ const dataStructure = [];
 
 /**
  * Use default field definitions as a base object, but override 'label' object with corresponding 'label' object from overrides
+ * Also convert fields from an object keyed on id to an array (with an id property)
  * @param  object defaults  key-object pairs defining field definitions
  * @param  object overrides key-object pairs defining field definitions to be sued to override the defaults. ONLY THE 'label' OBJECT IS OVERRIDDEN
  * @return object           clone of 'defaults' with any 'label' object replaced with corresponding 'label' object from overrides
  */
 function mergeFields(defaults, overrides) {
-  const fieldsCopy = _.cloneDeep(defaults);
+  const fieldsCopy = [];
   if (!overrides) return fields;
-  Object.keys(fieldsCopy).forEach((fieldId) => {
-    const field = fieldsCopy[fieldId];
+  Object.keys(defaults).forEach((fieldId) => {
+    const fieldDef = _.cloneDeep(defaults[fieldId]);
+    fieldDef.id = fieldId; // include the key as an id
+    fieldsCopy.push(fieldDef); // convert to array
     const override = overrides[fieldId];
     if (!override) return;
     if (override.labels) {
-      field.labels = override.labels;
+      fieldDef.labels = override.labels;
     } else if (override.options) {
-      field.options = override.options;
+      fieldDef.options = override.options;
     }
   });
   return fieldsCopy;
