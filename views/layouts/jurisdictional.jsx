@@ -21,6 +21,7 @@ class Layout extends React.Component {
     return (
       <DefaultLayout {...this.props}>
         <div className="container container-full">
+          <div><span>{this.props.data.nationName}</span><span>{this.props.data.name}</span></div>
           <NavJurisdictional {...this.props}/>
           <div>JURISDICTIONAL STUFF</div>
           {this.props.children}
