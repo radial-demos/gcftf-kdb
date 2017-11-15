@@ -3,12 +3,16 @@
 require('dotenv').config();
 const debug = require('debug')('kdb:model-data');
 
+const { MongoClient } = require('mongodb');
 const _ = require('lodash');
+
 
 const regions = require('../config/regions');
 const fields = require('../config/fields');
 
-let dataFramework;
+const DB_URL = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:27017/${process.env.DB_NAME}`;
+
+const dataStructure = [];
 
 /**
  * Use default field definitions as a base object, but override 'label' object with corresponding 'label' object from overrides
@@ -35,25 +39,19 @@ function mergeFields(defaults, overrides) {
  * Use regions (nation definitions with member jurisdiction definitions) and assign 'fields' (either national or regional) for each
  * @return {object} clone of 'regions' with 'fields' object assigned to each nation and jurisdiction
  */
-function getDataFramework() {
-  const framework = [];
-  regions.forEach((region) => {
-    const frameworkItem = _.cloneDeep(region);
-    frameworkItem.fields = mergeFields(fields.national, region.fields);
-    framework.push(frameworkItem);
-    if (!Array.isArray(frameworkItem.jurisdictions)) return;
-    frameworkItem.jurisdictions.forEach((jurisdiction) => {
-      jurisdiction.fields = mergeFields(fields.jurisdictional, jurisdiction.fields);
+function populateDataStructure() {
+  regions.forEach((nation) => {
+    const structureItem = _.cloneDeep(nation);
+    structureItem.fields = mergeFields(fields.national, nation.fields);
+    dataStructure.push(structureItem);
+    if (!Array.isArray(structureItem.jurisdictions)) return;
+    structureItem.jurisdictions.forEach((jurisdiction) => {
+      jurisdiction.fields = mergeFields(fields.jurisdictional, jurisdiction.fields);``
     });
   });
-  return framework;
 }
-/**
- * use 'dataFramework' with values merged from the database to return an object with all data entry definitions populated with values
- * @param  {object} props key/value pairs specifying 'nationId' (required) and (optional) 'jurisdictionId'
- * @return {object}       All information (including field definitions and values) for requested nation or jurisdiction
- */
-function get(props) {
+function assertValidProps(props) {
+  // nationId is required and must be a string of non-zero length
   if (!Object.prototype.hasOwnProperty.call(props, 'nationId')) {
     throw Error('Missing \'nationId\' property. This property must be specified.');
   }
@@ -63,30 +61,45 @@ function get(props) {
   if (!props.nationId.length) {
     throw Error('Empty \'nationId\' value. The value of this property must be a non zero length string.');
   }
-  const nationItem = dataFramework.find(r => (r.id === props.nationId));
-  if (!nationItem) {
-    throw Error(`Nation not found. No nation with the id '${props.nationId}' has been defined in 'config/regions'.`);
+  // jurisdictionId is optional (and may cast to false)
+  if (!props.jurisdictionId) {
+    return true;
   }
-  if (!Object.prototype.hasOwnProperty.call(props, 'jurisdictionId')) {
-    return nationItem;
-  }
-  // find jurisdiction
+  // if jurisdictionId is specified, it must be a string
   if (typeof props.jurisdictionId !== 'string') {
     throw Error('Non-string \'jurisdictionId\' value. The value of this property must be a string.');
   }
-  if (!props.jurisdictionId.length) {
-    throw Error('Empty \'jurisdictionId\' value. The value of this property must be a non zero length string.');
+  return true;
+}
+/**
+ * use 'dataFramework' with values merged from the database to return an object with all data entry definitions populated with values
+ * @param  {object} props key/value pairs specifying 'nationId' (required) and (optional) 'jurisdictionId'
+ * @return {object}       All information (including field definitions and values) for requested nation or jurisdiction
+ */
+async function get(props) {
+  assertValidProps(props);
+  let structureItem = dataStructure.find(r => (r.id === props.nationId));
+  if (!structureItem) {
+    throw Error(`Nation not found. No nation with the id '${props.nationId}' has been defined in 'config/regions'.`);
   }
-  if (!Array.isArray(nationItem.jurisdictions)) {
-    throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
+  if (props.jurisdictionId) {
+    // try to find jurisdiction
+    if (!Array.isArray(structureItem.jurisdictions)) {
+      throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
+    }
+    structureItem = structureItem.jurisdictions.find(r => (r.id === props.jurisdictionId));
+    if (!structureItem) {
+      throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
+    }
   }
-  const jurisdictionItem = nationItem.jurisdictions.find(r => (r.id === props.jurisdictionId));
-  if (!jurisdictionItem) {
-    throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
-  }
-  return jurisdictionItem;
+  // merge data values from database into each field defined in the structure
+  const db = await MongoClient.connect(DB_URL);
+  const data = await db.collection('data').find().toArray();
+  await db.close();
+  // debug(data.length);
+  return structureItem;
 }
 
-dataFramework = getDataFramework();
+populateDataStructure();
 
 module.exports = { get };
