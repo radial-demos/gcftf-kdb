@@ -10,7 +10,7 @@ function NavJurisdictional(props) {
   return (
     <div>
       {
-        props.viewDefinitions.map(r => <a href={`/${r.uriSegment}/${props.nationId}/${props.jurisdictionId}`}><div>{r.label}</div></a>)
+        props.views.map(r => <a href={`/${r.uriSegment}/${props.data.jurisdiction.nationUriSegment}/${props.data.jurisdiction.uriSegment}`}><div>{r.label}</div></a>)
       }
     </div>
   );
