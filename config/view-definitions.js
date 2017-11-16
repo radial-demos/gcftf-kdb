@@ -2,7 +2,7 @@
 
 module.exports = [
   {
-    id: 'index',
+    id: 'home',
     uriSegment: 'Home',
     label: 'Home',
     layout: 'default',
@@ -19,35 +19,35 @@ module.exports = [
     id: 'nationpage',
     uriSegment: 'NationPage',
     label: 'Nation Page',
-    layout: 'national',
+    layout: 'nation',
     model: 'data',
   },
   {
     id: 'stateoverview',
     uriSegment: 'StateOverview',
     label: 'Overview',
-    layout: 'jurisdictional',
+    layout: 'jurisdiction',
     model: 'data',
   },
   {
     id: 'carbonaccounting',
     uriSegment: 'CarbonAccounting',
     label: 'Carbon Accounting',
-    layout: 'jurisdictional',
+    layout: 'jurisdiction',
     model: 'data',
   },
   {
     id: 'frameworks',
     uriSegment: 'Frameworks',
     label: 'Legal, Policy & Institutional Frameworks',
-    layout: 'jurisdictional',
+    layout: 'jurisdiction',
     model: 'data',
   },
   {
     id: 'partnerships',
     uriSegment: 'Partnerships',
     label: 'Partnerships and Ongoing Initiatives',
-    layout: 'jurisdictional',
+    layout: 'jurisdiction',
     model: 'data',
   },
 ];
