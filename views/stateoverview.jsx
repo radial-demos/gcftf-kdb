@@ -1,5 +1,6 @@
 const React = require('react');
-const JurisdictionalLayout = require('./layouts/jurisdictional.jsx');
+const JurisdictionLayout = require('./layouts/jurisdiction.jsx');
+
 const {
   Divider,
   EntryText,
@@ -13,7 +14,7 @@ const {
 class Page extends React.Component {
   render() {
     return (
-      <JurisdictionalLayout {...this.props}>
+      <JurisdictionLayout {...this.props}>
         <EntryText showLabel={false} entry={this.props.data.jurisdiction.fields.txt_state_description}/>
         <StatisticContact entry={this.props}/>
         <StatisticContact entry={this.props}/>
@@ -23,7 +24,7 @@ class Page extends React.Component {
         <StatisticNumberAndCurrency entry={this.props}/>
         <StatisticNumberAndYear entry={this.props}/>
         <StatisticString entry={this.props}/>
-      </JurisdictionalLayout>
+      </JurisdictionLayout>
     );
   }
 }

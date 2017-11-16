@@ -1,7 +1,7 @@
 require('dotenv').config();
 const debug = require('debug')('kdb:views:carbonaccounting');
 const React = require('react');
-const JurisdictionalLayout = require('./layouts/jurisdictional.jsx');
+const JurisdictionLayout = require('./layouts/jurisdiction.jsx');
 const {
   Divider,
   EntryText,
@@ -15,9 +15,9 @@ const {
 class Page extends React.Component {
   render() {
     return (
-      <JurisdictionalLayout {...this.props}>
+      <JurisdictionLayout {...this.props}>
         <EntryText entry={this.props.data.jurisdiction.fields.overviewForestMonitoringAndMeasurementSystems}/>
-      </JurisdictionalLayout>
+      </JurisdictionLayout>
     );
   }
 }

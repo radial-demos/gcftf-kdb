@@ -1,12 +1,12 @@
 const React = require('react');
-const JurisdictionalLayout = require('./layouts/jurisdictional.jsx');
+const JurisdictionLayout = require('./layouts/jurisdiction.jsx');
 
 class HelloMessage extends React.Component {
   render() {
     return (
-      <JurisdictionalLayout {...this.props}>
+      <JurisdictionLayout {...this.props}>
         <div>Hello There {this.props.name}</div>
-      </JurisdictionalLayout>
+      </JurisdictionLayout>
     );
   }
 }
