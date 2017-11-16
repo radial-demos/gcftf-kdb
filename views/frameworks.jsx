@@ -1,11 +1,23 @@
 const React = require('react');
 const JurisdictionLayout = require('./layouts/jurisdiction.jsx');
+const {
+  Divider,
+  EntryText,
+  StatisticString,
+  StatisticContact,
+  StatisticNumber,
+  StatisticNumberAndCurrency,
+  StatisticNumberAndYear,
+} = require('./components');
 
 class HelloMessage extends React.Component {
   render() {
     return (
       <JurisdictionLayout {...this.props}>
-        <div>Hello There {this.props.name}</div>
+        <EntryText entry={this.props.data.jurisdiction.fields.frameworksLawsPoliciesStrategies}/>
+        <EntryText entry={this.props.data.jurisdiction.fields.frameworksInstitutionalFramework}/>
+        <EntryText entry={this.props.data.jurisdiction.fields.frameworksZoningSpatialPlanning}/>
+        <EntryText entry={this.props.data.jurisdiction.fields.frameworksSafeguards}/>
       </JurisdictionLayout>
     );
   }
