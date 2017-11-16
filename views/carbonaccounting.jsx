@@ -2,7 +2,15 @@ require('dotenv').config();
 const debug = require('debug')('kdb:views:carbonaccounting');
 const React = require('react');
 const JurisdictionalLayout = require('./layouts/jurisdictional.jsx');
-const EntryText = require('./components/entry-text.jsx');
+const {
+  Divider,
+  EntryText,
+  StatisticString,
+  StatisticContact,
+  StatisticNumber,
+  StatisticNumberAndCurrency,
+  StatisticNumberAndYear,
+} = require('./components');
 
 class Page extends React.Component {
   render() {

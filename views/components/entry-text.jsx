@@ -8,7 +8,6 @@ class Component extends React.Component {
     const label = entry.label || '';
     const showLabel = (!(this.props.showLabel === false) && label.length);
     const value = entry.value || {};
-    // <h4>{label}</h4>
     return (
       <div>
         {showLabel && <h4>{label}</h4>}
