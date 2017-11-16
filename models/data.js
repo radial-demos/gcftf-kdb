@@ -203,27 +203,27 @@ async function get(props) {
       const fieldValueRecs = valueRecs.filter(r => (r.fieldId === fieldObj.id));
       Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
     });
-  } else {
-    // this is a nation -- nation must be processed and each child object in jurisdictions must be processed
-    if (structureWithValues.fields) { // NO EARLY RETURN (jurisdictions must be processed too!)
-      const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
-      Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
-        const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === fieldObj.id));
-        Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
-      });
-    }
-    // now process the jurisdictions
-    if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues; // early return OK
-    structureWithValues.jurisdictions.forEach((jurisdiction) => {
-      if (!jurisdiction.fields) return;
-      const jurisdictionValueRecs = valueRecs.filter(r => (r.jurisdictionId === jurisdiction.id));
-      Object.entries(jurisdiction.fields).forEach(([, fieldObj]) => {
-        const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === fieldObj.id));
-        Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
-      });
+    return { jurisdiction: structureWithValues };
+  }
+  // this is a nation -- nation must be processed and each child object in jurisdictions must be processed
+  if (structureWithValues.fields) { // NO EARLY RETURN (jurisdictions must be processed too!)
+    const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
+    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
+      const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === fieldObj.id));
+      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
     });
   }
-  return structureWithValues;
+  // now process each jurisdiction
+  if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues; // early return OK
+  structureWithValues.jurisdictions.forEach((jurisdiction) => {
+    if (!jurisdiction.fields) return;
+    const jurisdictionValueRecs = valueRecs.filter(r => (r.jurisdictionId === jurisdiction.id));
+    Object.entries(jurisdiction.fields).forEach(([, fieldObj]) => {
+      const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === fieldObj.id));
+      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
+    });
+  });
+  return { nation: structureWithValues };
 }
 
 populateDataStructure();

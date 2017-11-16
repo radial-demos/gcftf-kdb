@@ -16,7 +16,7 @@ class Page extends React.Component {
   render() {
     return (
       <JurisdictionalLayout {...this.props}>
-        <EntryText entry={this.props.jurisdiction.fields.overviewForestMonitoringAndMeasurementSystems}/>
+        <EntryText entry={this.props.data.jurisdiction.fields.overviewForestMonitoringAndMeasurementSystems}/>
       </JurisdictionalLayout>
     );
   }

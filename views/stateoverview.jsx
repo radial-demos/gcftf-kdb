@@ -14,7 +14,7 @@ class Page extends React.Component {
   render() {
     return (
       <JurisdictionalLayout {...this.props}>
-        <EntryText showLabel={false} entry={this.props.jurisdiction.fields.txt_state_description}/>
+        <EntryText showLabel={false} entry={this.props.data.jurisdiction.fields.txt_state_description}/>
         <StatisticContact entry={this.props}/>
         <StatisticContact entry={this.props}/>
         <StatisticContact entry={this.props}/>
