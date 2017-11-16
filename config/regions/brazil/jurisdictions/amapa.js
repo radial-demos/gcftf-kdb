@@ -3,6 +3,7 @@
 module.exports = {
   id: 'amapa',
   name: 'Amapá',
+  uriSegment: 'Amapa',
   constants: {
     forestArea: { value: 101700, units: 'km²' },
     forestCarbon: { value: 1452.3, units: 'M MtC' },
