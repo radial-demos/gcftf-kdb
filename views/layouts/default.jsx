@@ -15,7 +15,13 @@ class Layout extends React.Component {
         </head>
         <body>
           <div className="container container-header">
-            <a href="/"><img src="/assets/images/logo.png"/></a>
+            <div className="logoArea">
+              <span className="logoArea-logo">GCF</span>
+              <span className="logoArea-text">
+                <span className="logoArea-name">Governors' Climate &amp; Forests Task Force</span><br/>
+                <span className="logoArea-project">Knowledge Database</span>
+              </span>
+            </div>
           </div>
           <div className="container container-full">
             <NavMain {...this.props}/>
