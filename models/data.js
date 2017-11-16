@@ -24,11 +24,11 @@ const dataStructure = [];
  * @return object           clone of 'defaults' with any 'label' object replaced with corresponding 'label' object from overrides
  */
 function mergeFields(defaults, overrides = {}) {
-  const fieldsCopy = [];
+  const fieldsCopy = {};
   Object.keys(defaults).forEach((fieldId) => {
     const fieldDef = _.cloneDeep(defaults[fieldId]);
     fieldDef.id = fieldId; // include the key as an id
-    fieldsCopy.push(fieldDef); // convert to array
+    fieldsCopy[fieldId] = fieldDef;
     const override = overrides[fieldId];
     if (!override) return;
     if (override.labels) {
@@ -197,26 +197,29 @@ async function get(props) {
   const valueRecs = await getValueRecs(filterSpec);
   const structureWithValues = _.cloneDeep(structureItem);
   if (filterSpec.jurisdictionId) {
-    if (!Array.isArray(structureWithValues.fields)) return structureWithValues;
-    structureWithValues.fields.forEach((field) => {
-      const fieldValueRecs = valueRecs.filter(r => (r.fieldId === field.id));
-      Object.assign(field, getValueAttributes(field, fieldValueRecs));
+    // this is just a jurisdiction -- only the jurisdiction is processed
+    if (!structureWithValues.fields) return structureWithValues; // early return OK
+    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
+      const fieldValueRecs = valueRecs.filter(r => (r.fieldId === fieldObj.id));
+      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
     });
   } else {
-    if (Array.isArray(structureWithValues.fields)) {
+    // this is a nation -- nation must be processed and each child object in jurisdictions must be processed
+    if (structureWithValues.fields) { // NO EARLY RETURN (jurisdictions must be processed too!)
       const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
-      structureWithValues.fields.forEach((field) => {
-        const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === field.id));
-        Object.assign(field, getValueAttributes(field, fieldValueRecs));
+      Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
+        const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === fieldObj.id));
+        Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
       });
     }
-    if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues;
+    // now process the jurisdictions
+    if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues; // early return OK
     structureWithValues.jurisdictions.forEach((jurisdiction) => {
-      if (!Array.isArray(jurisdiction.fields)) return;
+      if (!jurisdiction.fields) return;
       const jurisdictionValueRecs = valueRecs.filter(r => (r.jurisdictionId === jurisdiction.id));
-      jurisdiction.fields.forEach((field) => {
-        const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === field.id));
-        Object.assign(field, getValueAttributes(field, fieldValueRecs));
+      Object.entries(jurisdiction.fields).forEach(([, fieldObj]) => {
+        const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === fieldObj.id));
+        Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
       });
     });
   }
