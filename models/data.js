@@ -1,14 +1,16 @@
 'use strict';
 
 require('dotenv').config();
-const debug = require('debug')('kdb:model-data');
+const debug = require('debug')('kdbx:model-data');
+
+debug('\x1Bc');
 
 const { MongoClient } = require('mongodb');
 const _ = require('lodash');
 
 
-const regions = require('../config/regions');
-const fields = require('../config/fields');
+const regionDefs = require('../config/regions');
+const fieldDefs = require('../config/fields');
 
 const DB_URL = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:27017/${process.env.DB_NAME}`;
 
@@ -16,14 +18,13 @@ const dataStructure = [];
 
 /**
  * Use default field definitions as a base object, but override 'label' object with corresponding 'label' object from overrides
- * Also convert fields from an object keyed on id to an array (with an id property)
+ * Also convert fieldDefs from an object keyed on id to an array (with an id property)
  * @param  object defaults  key-object pairs defining field definitions
  * @param  object overrides key-object pairs defining field definitions to be sued to override the defaults. ONLY THE 'label' OBJECT IS OVERRIDDEN
  * @return object           clone of 'defaults' with any 'label' object replaced with corresponding 'label' object from overrides
  */
-function mergeFields(defaults, overrides) {
+function mergeFields(defaults, overrides = {}) {
   const fieldsCopy = [];
-  if (!overrides) return fields;
   Object.keys(defaults).forEach((fieldId) => {
     const fieldDef = _.cloneDeep(defaults[fieldId]);
     fieldDef.id = fieldId; // include the key as an id
@@ -39,19 +40,105 @@ function mergeFields(defaults, overrides) {
   return fieldsCopy;
 }
 /**
- * Use regions (nation definitions with member jurisdiction definitions) and assign 'fields' (either national or regional) for each
- * @return {object} clone of 'regions' with 'fields' object assigned to each nation and jurisdiction
+ * Use regionDefs (nation definitions with member jurisdiction definitions) and assign 'fieldDef' (either national or regional) for each
+ * @return {object} clone of 'regionDef' with 'fields' object assigned to each nation and jurisdiction
  */
 function populateDataStructure() {
-  regions.forEach((nation) => {
+  regionDefs.forEach((nation) => {
     const structureItem = _.cloneDeep(nation);
-    structureItem.fields = mergeFields(fields.national, nation.fields);
+    structureItem.fields = mergeFields(fieldDefs.national, nation.fields);
     dataStructure.push(structureItem);
     if (!Array.isArray(structureItem.jurisdictions)) return;
     structureItem.jurisdictions.forEach((jurisdiction) => {
-      jurisdiction.fields = mergeFields(fields.jurisdictional, jurisdiction.fields);``
+      jurisdiction.fields = mergeFields(fieldDefs.jurisdictional, jurisdiction.fields);
     });
   });
+}
+function getDefaultValueAttributes(fieldType) {
+  const obj = {
+    citation: { html: '' },
+    timestamp: ''
+  };
+  switch (fieldType) {
+    case 'KDBText':
+      obj.value = { html: '' };
+      break;
+    case 'KDBString':
+      obj.value = { string: '' };
+      break;
+    case 'KDBNumber':
+      obj.value = { amount: null };
+      break;
+    case 'KDBSelect':
+      obj.value = { index: null };
+      break;
+    case 'KDBPerson':
+      obj.values = {
+        firstName: { string: '' },
+        lastName: { string: '' },
+        email: { string: '' },
+        companyTitle: { string: '' },
+      };
+      break;
+    case '[KDBInitiative]':
+      // {
+      //   name: { string: row.name },
+      //   description: { html: row.description.html },
+      //   partners: { string: row.partners },
+      //   fundingSource: { string: row.fundingSource },
+      //   fundingAmount: { string: row.fundingAmount.string },
+      //   initiativeType: { string: row.initiativeType },
+      //   initiativeStatus: { string: row.initiativeStatus },
+      // }
+      break;
+    default:
+      debug(`Invalid field type '${fieldType}'`);
+      break;
+  }
+  return obj;
+}
+function getValueAttributes(field, fieldValueRecs = []) {
+  if (!Array.isArray(fieldValueRecs) || !fieldValueRecs.length) {
+    return getDefaultValueAttributes(field.type);
+  }
+  const obj = {
+    timestamp: fieldValueRecs[0].timestamp || '',
+  };
+  if (fieldValueRecs[0].citation) {
+    obj.citation = fieldValueRecs[0].citation;
+  }
+  switch (field.type) {
+    case 'KDBText':
+      obj.value = fieldValueRecs[0].value;
+      break;
+    case 'KDBString':
+      obj.value = fieldValueRecs[0].value;
+      break;
+    case 'KDBNumber':
+      obj.value = fieldValueRecs[0].value;
+      break;
+    case 'KDBSelect':
+      obj.value = fieldValueRecs[0].value;
+      break;
+    case 'KDBPerson':
+      obj.values = fieldValueRecs[0].values;
+      break;
+    case '[KDBInitiative]':
+      // {
+      //   name: { string: row.name },
+      //   description: { html: row.description.html },
+      //   partners: { string: row.partners },
+      //   fundingSource: { string: row.fundingSource },
+      //   fundingAmount: { string: row.fundingAmount.string },
+      //   initiativeType: { string: row.initiativeType },
+      //   initiativeStatus: { string: row.initiativeStatus },
+      // }
+      break;
+    default:
+      debug(`Invalid field type '${field.type}'`);
+      break;
+  }
+  return obj;
 }
 async function getValueRecs(filterSpec) {
   try {
@@ -108,8 +195,32 @@ async function get(props) {
   const filterSpec = { nationId: props.nationId };
   if (props.jurisdictionId) filterSpec.jurisdictionId = props.jurisdictionId;
   const valueRecs = await getValueRecs(filterSpec);
-  // debug(valueRecs);
-  return structureItem;
+  const structureWithValues = _.cloneDeep(structureItem);
+  if (filterSpec.jurisdictionId) {
+    if (!Array.isArray(structureWithValues.fields)) return structureWithValues;
+    structureWithValues.fields.forEach((field) => {
+      const fieldValueRecs = valueRecs.filter(r => (r.fieldId === field.id));
+      Object.assign(field, getValueAttributes(field, fieldValueRecs));
+    });
+  } else {
+    if (Array.isArray(structureWithValues.fields)) {
+      const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
+      structureWithValues.fields.forEach((field) => {
+        const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === field.id));
+        Object.assign(field, getValueAttributes(field, fieldValueRecs));
+      });
+    }
+    if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues;
+    structureWithValues.jurisdictions.forEach((jurisdiction) => {
+      if (!Array.isArray(jurisdiction.fields)) return;
+      const jurisdictionValueRecs = valueRecs.filter(r => (r.jurisdictionId === jurisdiction.id));
+      jurisdiction.fields.forEach((field) => {
+        const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === field.id));
+        Object.assign(field, getValueAttributes(field, fieldValueRecs));
+      });
+    });
+  }
+  return structureWithValues;
 }
 
 populateDataStructure();
