@@ -16,12 +16,22 @@ function NavJurisdictional(props) {
   );
 }
 
+function Header(props) {
+  const data = props.data || {};
+  // debug(props.data);
+  const nationName = data.nationName || '';
+  const jurisdictionName = data.name || '';
+  return (
+    <div><span>{nationName}</span><span>{jurisdictionName}</span></div>
+  );
+}
+
 class Layout extends React.Component {
   render() {
     return (
       <DefaultLayout {...this.props}>
         <div className="container container-full">
-          <div><span>{this.props.data.nationName}</span><span>{this.props.data.name}</span></div>
+          <Header {...this.props}/>
           <NavJurisdictional {...this.props}/>
           <div>JURISDICTIONAL STUFF</div>
           {this.props.children}
