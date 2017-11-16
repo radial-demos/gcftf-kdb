@@ -4,9 +4,16 @@ const React = require('react');
 
 class Component extends React.Component {
   render() {
+    const entry = this.props.entry || {};
+    const label = entry.label || '';
+    const showLabel = (!(this.props.showLabel === false) && label.length);
+    const value = entry.value || {};
+    // <h4>{label}</h4>
     return (
-      <div className="entry entry--text">
-        <p>I am some text</p>
+      <div>
+        {showLabel && <h4>{label}</h4>}
+        <div className="entry entry--text" dangerouslySetInnerHTML={{ __html: value.html }}>
+        </div>
       </div>
     );
   }
