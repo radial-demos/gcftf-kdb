@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  jurisdictionId: 'amapa',
+  id: 'amapa',
   name: 'Amapá',
   constants: {
     forestArea: { value: 101700, units: 'km²' },
