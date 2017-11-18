@@ -29,7 +29,7 @@ module.exports = {
   },
   national_percent_forested: {
     type: 'KDBNumber',
-    label: '% of Land That Is Forest',
+    label: '% of Land that is Forest',
     numberFormat: '.2f',
     units: '%',
   },
