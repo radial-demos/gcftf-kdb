@@ -3,10 +3,6 @@
 require('dotenv').config();
 const debug = require('debug')('kdb:data-definitions');
 
-const fields = {};
-fields.national = require('../fields/national');
-fields.jurisdictional = require('../fields/jurisdictional');
-
 const nations = [];
 nations.push(require('./brazil'));
 nations.push(require('./colombia'));
