@@ -21,12 +21,12 @@ module.exports = {
     numberFormat: ',',
   },
   gdp: {
-    type: 'KDBCurrency',
+    type: 'KDBNumberAndCurrency',
     label: 'State/Province GDP',
     numberFormat: ',',
   },
   per_capita_income: {
-    type: 'KDBCurrency',
+    type: 'KDBNumberAndCurrency',
     label: 'Annual Per Capita Income',
     numberFormat: ',.0f',
   },

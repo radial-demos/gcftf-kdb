@@ -7,12 +7,12 @@ module.exports = {
     numberFormat: ',',
   },
   national_gdp: {
-    type: 'KDBCurrency',
+    type: 'KDBNumberAndCurrency',
     label: 'Country GDP',
     numberFormat: ',',
   },
   national_per_capita_income: {
-    type: 'KDBCurrency',
+    type: 'KDBNumberAndCurrency',
     label: 'Annual Per Capita Income',
     numberFormat: ',.0f',
   },
