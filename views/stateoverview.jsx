@@ -24,8 +24,8 @@ class Page extends React.Component {
         <Divider label="Demographics"/>
         <StatisticNumber entry={this.props.data.jurisdiction.fields.population}/>
         <Divider label="Economy"/>
-        <StatisticNumberAndCurrency entry={this.props.data.jurisdiction.fields.gdp}/>
-        <StatisticNumberAndCurrency entry={this.props.data.jurisdiction.fields.per_capita_income}/>
+        <StatisticNumber entry={this.props.data.jurisdiction.fields.gdp}/>
+        <StatisticNumber entry={this.props.data.jurisdiction.fields.per_capita_income}/>
         <StatisticNumber entry={this.props.data.jurisdiction.fields.human_development_index}/>
         <StatisticString entry={this.props.data.jurisdiction.fields.main_exports}/>
         <Divider label="Forest Status"/>
