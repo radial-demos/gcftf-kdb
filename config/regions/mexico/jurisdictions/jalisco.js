@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Jalisco',
   name: 'Jalisco',
   constants: {
-    forestArea: { value: 33680.505, units: 'km²' },
-    forestCarbon: { value: 86.88, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 33680.505 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 86.88 }, units: 'M MtC' },
   },
   fields: {
     gdp_breakdown_percent: {

@@ -5,8 +5,8 @@ module.exports = {
   name: 'Rondônia',
   uriSegment: 'Rondonia',
   constants: {
-    forestArea: { value: 124200, units: 'km²' },
-    forestCarbon: { value: 1471.9, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 124200 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 1471.9 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

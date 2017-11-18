@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Chiapas',
   name: 'Chiapas',
   constants: {
-    forestArea: { value: 32817.235, units: 'km²' },
-    forestCarbon: { value: 232.04, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 32817.235 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 232.04 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: { /* Chiapas specific */

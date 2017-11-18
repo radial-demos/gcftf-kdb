@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'CrossRiverState',
   name: 'Cross River State',
   constants: {
-    forestArea: { value: 2070.28, units: 'km²' },
-    forestCarbon: { value: 15.97, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 2070.28 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 15.97 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

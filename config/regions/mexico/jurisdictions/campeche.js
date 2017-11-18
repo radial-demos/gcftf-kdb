@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Campeche',
   name: 'Campeche',
   constants: {
-    forestArea: { value: 41063.28, units: 'km²' },
-    forestCarbon: { value: 215.67, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 41063.28 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 215.67 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: { /* Campeche specific */

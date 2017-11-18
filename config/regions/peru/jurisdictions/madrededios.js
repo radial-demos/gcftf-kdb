@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'MadreDeDios',
   name: 'Madre de Dios',
   constants: {
-    forestArea: { value: 80000, units: 'km²' },
-    forestCarbon: { value: 796.2, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 80000 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 796.2 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

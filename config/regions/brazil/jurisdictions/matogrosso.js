@@ -5,8 +5,8 @@ module.exports = {
   name: 'Mato Grosso',
   uriSegment: 'MatoGrosso',
   constants: {
-    forestArea: { value: 314000, units: 'km²' },
-    forestCarbon: { value: 3258.9, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 314000 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 3258.9 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

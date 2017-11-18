@@ -5,8 +5,8 @@ module.exports = {
   name: 'Tocantins',
   uriSegment: 'Tocantins',
   constants: {
-    forestArea: { value: 2600, units: 'km²' },
-    forestCarbon: { value: 17.4, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 2600 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 17.4 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

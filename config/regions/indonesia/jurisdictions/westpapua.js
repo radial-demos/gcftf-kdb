@@ -6,8 +6,8 @@ module.exports = {
   uriSegment: 'WestPapua',
   localName: 'Papua Barat',
   constants: {
-    forestArea: { value: 90500, units: 'km²' },
-    forestCarbon: { value: 1322.7662, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 90500 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 1322.7662 }, units: 'M MtC' },
   },
   fields: {
     gdp_breakdown_percent: {

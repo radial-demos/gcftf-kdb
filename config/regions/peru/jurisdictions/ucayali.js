@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Ucayali',
   name: 'Ucayali',
   constants: {
-    forestArea: { value: 94700, units: 'km²' },
-    forestCarbon: { value: 947.4, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 94700 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 947.4 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

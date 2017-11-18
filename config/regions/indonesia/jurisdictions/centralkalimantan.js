@@ -6,8 +6,8 @@ module.exports = {
   uriSegment: 'CentralKalimantan',
   localName: 'Kalimantan Tengah',
   constants: {
-    forestArea: { value: 80200, units: 'km²' },
-    forestCarbon: { value: 1130.7401, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 80200 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 1130.7401 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: { /* Central Kalimantan specific */

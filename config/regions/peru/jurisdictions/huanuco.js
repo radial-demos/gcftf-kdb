@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Huanuco',
   name: 'Huánuco',
   constants: {
-    forestArea: { value: 16300, units: 'km²' },
-    forestCarbon: { value: 107.5, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 16300 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 107.5 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

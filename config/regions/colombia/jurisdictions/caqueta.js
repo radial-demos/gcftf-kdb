@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Caqueta',
   name: 'Caquetá',
   constants: {
-    forestArea: { value: 65700, units: 'km²' },
-    forestCarbon: { value: 538.29, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 65700 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 538.29 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

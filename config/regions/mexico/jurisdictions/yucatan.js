@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Yucatan',
   name: 'Yucatán',
   constants: {
-    forestArea: { value: 19327.56, units: 'km²' },
-    forestCarbon: { value: 70.91, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 19327.56 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 70.91 }, units: 'M MtC' },
   },
   fields: {
     gdp_breakdown_percent: {

@@ -5,8 +5,8 @@ module.exports = {
   name: 'Acre',
   uriSegment: 'Acre',
   constants: {
-    forestArea: { value: 148500, units: 'km²' },
-    forestCarbon: { value: 1851.7, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 148500 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 1851.7 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

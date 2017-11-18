@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'SanMartin',
   name: 'San Martín',
   constants: {
-    forestArea: { value: 34200, units: 'km²' },
-    forestCarbon: { value: 262.7, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 34200 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 262.7 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

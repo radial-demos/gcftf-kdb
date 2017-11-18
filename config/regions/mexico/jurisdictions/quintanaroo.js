@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'QuintanaRoo',
   name: 'Quintana Roo',
   constants: {
-    forestArea: { value: 36364.6, units: 'km²' },
-    forestCarbon: { value: 161.86, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 36364.6 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 161.86 }, units: 'M MtC' },
   },
   fields: {
     gdp_breakdown_percent: {

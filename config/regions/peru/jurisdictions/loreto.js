@@ -5,8 +5,8 @@ module.exports = {
   uriSegment: 'Loreto',
   name: 'Loreto',
   constants: {
-    forestArea: { value: 352200, units: 'km²' },
-    forestCarbon: { value: 3584.6, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 352200 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 3584.6 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: {

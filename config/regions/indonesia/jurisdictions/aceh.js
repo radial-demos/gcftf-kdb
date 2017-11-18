@@ -5,8 +5,8 @@ module.exports = {
   name: 'Aceh',
   uriSegment: 'Aceh',
   constants: {
-    forestArea: { value: 31600, units: 'km²' },
-    forestCarbon: { value: 449.3265, units: 'M MtC' },
+    forestArea: { label: 'Current Forest Area', value: { amount: 31600 }, units: 'km²' },
+    forestCarbon: { label: 'Total Forest Carbon', value: { amount: 449.3265 }, units: 'M MtC' },
   },
   fields: {
     social_groups_percent: { /* Aceh specific */
