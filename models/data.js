@@ -69,6 +69,12 @@ function getDefaultValueAttributes(fieldType) {
     case 'KDBNumber':
       obj.value = { amount: null };
       break;
+    case 'KDBCurrency':
+      obj.value = { amount: null, currency: '' };
+      break;
+    case 'KDBNumberAndYear':
+      obj.value = { amount: null, year: '' };
+      break;
     case 'KDBSelect':
       obj.value = { index: null };
       break;
@@ -115,6 +121,12 @@ function getValueAttributes(field, fieldValueRecs = []) {
       obj.value = fieldValueRecs[0].value;
       break;
     case 'KDBNumber':
+      obj.value = fieldValueRecs[0].value;
+      break;
+    case 'KDBCurrency':
+      obj.value = fieldValueRecs[0].value;
+      break;
+    case 'KDBNumberAndYear':
       obj.value = fieldValueRecs[0].value;
       break;
     case 'KDBSelect':
