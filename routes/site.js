@@ -52,23 +52,33 @@ function parseDataProps(reqParams = {}, viewDefinition) {
 
 module.exports = async (req, res, next) => {
   const props = {};
-  props.view = lookupViewDefinition(req.params);
-  // include views (array) for this layout type. This is used for subnavigation (in jurisdiction layout) to other pages within the layout
-  props.views = viewDefinitions.filter(r => (r.layout === props.view.layout));
+  try {
+    props.view = lookupViewDefinition(req.params);
+  } catch (err) {
+    res.error = { html: 'The page you requested does not exist. Please try using the navigation above to find the information you\'re looking for.' };
+    props.view = viewDefinitions[0];
+    res.status(404);
+  }
   if (props.view.model === 'data') {
     const dataProps = parseDataProps(req.params, props.view);
     try {
       props.data = await models.data.get(dataProps);
     } catch (err) {
-      throw Error(err);
+      res.error = { html: `The ${props.layout} you requested does not exist. Please try using the navigation above to find the information you're looking for.` };
+      props.view = viewDefinitions[0];
+      res.status(404);
     }
-  } else {
+  }
+
+  if (props.view.model === 'content') {
     try {
       props.content = await models.content.get();
     } catch (err) {
       throw Error(err);
     }
   }
+  // include views (array) for this layout type. This is used for subnavigation (in jurisdiction layout) to other pages within the layout
+  props.views = viewDefinitions.filter(r => (r.layout === props.view.layout));
   try {
     await res.render(props.view.id, props);
   } catch (err) {
