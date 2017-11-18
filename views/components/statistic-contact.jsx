@@ -6,7 +6,6 @@ class Component extends React.Component {
   render() {
     const entry = this.props.entry || {};
     const entryValue = entry.value || {};
-    debug(entryValue);
     const label = entry.label || '';
     const showLabel = (!(this.props.showLabel === false) && label.length);
     const nameFull = `${entryValue.firstName.string} ${entryValue.lastName.string}`.trim();
@@ -19,7 +18,7 @@ class Component extends React.Component {
         {isPopulated && <ul>
           <li className="contact-name">{nameFull}</li>
           {email && <li className="contact-email">{email}</li>}
-          {companyTitle && <span className="contact-title">{companyTitle}</span>}
+          {companyTitle && <li className="contact-title">{companyTitle}</li>}
         </ul>}
       </div>
     );
