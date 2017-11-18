@@ -1,9 +1,9 @@
 'use strict';
 
-const jurisdictional = require('./jurisdictional');
-const national = require('./national');
+const jurisdiction = require('./jurisdiction');
+const nation = require('./nation');
 
 module.exports = {
-  national,
-  jurisdictional,
+  nation,
+  jurisdiction,
 };

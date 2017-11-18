@@ -38,16 +38,16 @@ module.exports = {
   deforestation_reduction_goal: {
     type: 'KDBNumberAndYear',
     label: 'Deforestation Reduction Goals',
-    valueID: 'deforestation_reduction_goal_value', /* needed only for pre-production data import */
-    yearID: 'deforestation_reduction_goal_year', /* needed only for pre-production data import */
+    valueId: 'deforestation_reduction_goal_value', /* needed only for pre-production data import */
+    yearId: 'deforestation_reduction_goal_year', /* needed only for pre-production data import */
     numberFormat: ',.0f',
     units: 'km²/yr',
   },
   tons_of_co2_avoided: {
     type: 'KDBNumberAndYear',
     label: 'CO₂ Avoided',
-    valueID: 'tons_of_co2_avoided_value', /* needed only for pre-production data import */
-    yearID: 'tons_of_co2_avoided_year', /* needed only for pre-production data import */
+    valueId: 'tons_of_co2_avoided_value', /* needed only for pre-production data import */
+    yearId: 'tons_of_co2_avoided_year', /* needed only for pre-production data import */
     numberFormat: ',.0f',
     units: 'MtCO₂e',
   },
@@ -213,87 +213,87 @@ module.exports = {
     chartSpec: 'deforestation_rates',
     labels: {
       '1996': {
-        oldID: '1',
+        oldId: '1',
         label: '1996',
       },
       '1997': {
-        oldID: '2',
+        oldId: '2',
         label: '1997',
       },
       '1998': {
-        oldID: '3',
+        oldId: '3',
         label: '1998',
       },
       '1999': {
-        oldID: '4',
+        oldId: '4',
         label: '1999',
       },
       '2000': {
-        oldID: '5',
+        oldId: '5',
         label: '2000',
       },
       '2001': {
-        oldID: '6',
+        oldId: '6',
         label: '2001',
       },
       '2002': {
-        oldID: '7',
+        oldId: '7',
         label: '2002',
       },
       '2003': {
-        oldID: '8',
+        oldId: '8',
         label: '2003',
       },
       '2004': {
-        oldID: '9',
+        oldId: '9',
         label: '2004',
       },
       '2005': {
-        oldID: '10',
+        oldId: '10',
         label: '2005',
       },
       '2006': {
-        oldID: '11',
+        oldId: '11',
         label: '2006',
       },
       '2007': {
-        oldID: '12',
+        oldId: '12',
         label: '2007',
       },
       '2008': {
-        oldID: '13',
+        oldId: '13',
         label: '2008',
       },
       '2009': {
-        oldID: '14',
+        oldId: '14',
         label: '2009',
       },
       '2010': {
-        oldID: '15',
+        oldId: '15',
         label: '2010',
       },
       '2011': {
-        oldID: '16',
+        oldId: '16',
         label: '2011',
       },
       '2012': {
-        oldID: '17',
+        oldId: '17',
         label: '2012',
       },
       '2013': {
-        oldID: '18',
+        oldId: '18',
         label: '2013',
       },
       '2014': {
-        oldID: '19',
+        oldId: '19',
         label: '2014',
       },
       '2015': {
-        oldID: '20',
+        oldId: '20',
         label: '2015',
       },
       '2016': {
-        oldID: '21',
+        oldId: '21',
         label: '2016',
       },
     },

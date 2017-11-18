@@ -90,71 +90,71 @@ module.exports = {
     units: 'km²',
     labels: {
       '2000': {
-        oldID: '0',
+        oldId: '0',
         label: '2000',
       },
       '2001': {
-        oldID: '1',
+        oldId: '1',
         label: '2001',
       },
       '2002': {
-        oldID: '2',
+        oldId: '2',
         label: '2002',
       },
       '2003': {
-        oldID: '3',
+        oldId: '3',
         label: '2003',
       },
       '2004': {
-        oldID: '4',
+        oldId: '4',
         label: '2004',
       },
       '2005': {
-        oldID: '5',
+        oldId: '5',
         label: '2005',
       },
       '2006': {
-        oldID: '6',
+        oldId: '6',
         label: '2006',
       },
       '2007': {
-        oldID: '7',
+        oldId: '7',
         label: '2007',
       },
       '2008': {
-        oldID: '8',
+        oldId: '8',
         label: '2008',
       },
       '2009': {
-        oldID: '9',
+        oldId: '9',
         label: '2009',
       },
       '2010': {
-        oldID: '10',
+        oldId: '10',
         label: '2010',
       },
       '2011': {
-        oldID: '11',
+        oldId: '11',
         label: '2011',
       },
       '2012': {
-        oldID: '12',
+        oldId: '12',
         label: '2012',
       },
       '2013': {
-        oldID: '13',
+        oldId: '13',
         label: '2013',
       },
       '2014': {
-        oldID: '14',
+        oldId: '14',
         label: '2014',
       },
       '2015': {
-        oldID: '15',
+        oldId: '15',
         label: '2015',
       },
       '2016': {
-        oldID: '16',
+        oldId: '16',
         label: '2016',
       },
     },

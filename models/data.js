@@ -46,11 +46,11 @@ function mergeFields(defaults, overrides = {}) {
 function populateDataStructure() {
   regionDefs.forEach((nation) => {
     const structureItem = _.cloneDeep(nation);
-    structureItem.fields = mergeFields(fieldDefs.national, nation.fields);
+    structureItem.fields = mergeFields(fieldDefs.nation, nation.fields);
     dataStructure.push(structureItem);
     if (!Array.isArray(structureItem.jurisdictions)) return;
     structureItem.jurisdictions.forEach((jurisdiction) => {
-      jurisdiction.fields = mergeFields(fieldDefs.jurisdictional, jurisdiction.fields);
+      jurisdiction.fields = mergeFields(fieldDefs.jurisdiction, jurisdiction.fields);
     });
   });
 }
@@ -73,7 +73,7 @@ function getDefaultValueAttributes(fieldType) {
       obj.value = { index: null };
       break;
     case 'KDBPerson':
-      obj.values = {
+      obj.value = {
         firstName: { string: '' },
         lastName: { string: '' },
         email: { string: '' },
@@ -121,7 +121,7 @@ function getValueAttributes(field, fieldValueRecs = []) {
       obj.value = fieldValueRecs[0].value;
       break;
     case 'KDBPerson':
-      obj.values = fieldValueRecs[0].values;
+      obj.value = fieldValueRecs[0].value;
       break;
     case '[KDBInitiative]':
       // {
