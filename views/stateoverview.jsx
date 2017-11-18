@@ -16,14 +16,20 @@ class Page extends React.Component {
     return (
       <JurisdictionLayout {...this.props}>
         <EntryText showLabel={false} entry={this.props.data.jurisdiction.fields.txt_state_description}/>
-        <StatisticContact entry={this.props}/>
-        <StatisticContact entry={this.props}/>
-        <StatisticContact entry={this.props}/>
-        <Divider/>
-        <StatisticNumber entry={this.props}/>
-        <StatisticNumberAndCurrency entry={this.props}/>
-        <StatisticNumberAndYear entry={this.props}/>
-        <StatisticString entry={this.props}/>
+        <StatisticContact entry={this.props.data.jurisdiction.fields.governor}/>
+        <StatisticContact entry={this.props.data.jurisdiction.fields.representative_1}/>
+        <StatisticContact entry={this.props.data.jurisdiction.fields.representative_2}/>
+        <Divider label="Summary"/>
+        <StatisticNumber entry={this.props.data.jurisdiction.fields.land_area}/>
+        <Divider label="Demographics"/>
+        <StatisticNumber entry={this.props.data.jurisdiction.fields.population}/>
+        <Divider label="Economy"/>
+        <StatisticNumberAndCurrency entry={this.props.data.jurisdiction.fields.gdp}/>
+        <StatisticNumberAndCurrency entry={this.props.data.jurisdiction.fields.per_capita_income}/>
+        <StatisticNumber entry={this.props.data.jurisdiction.fields.human_development_index}/>
+        <StatisticString entry={this.props.data.jurisdiction.fields.main_exports}/>
+        <Divider label="Forest Status"/>
+        <StatisticNumber entry={this.props.data.jurisdiction.fields.original_forest_area}/>
       </JurisdictionLayout>
     );
   }
