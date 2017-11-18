@@ -33,7 +33,6 @@ class Layout extends React.Component {
         <div className="container container-full">
           <Header {...this.props}/>
           <NavJurisdictional {...this.props}/>
-          <div>JURISDICTIONAL STUFF</div>
           {this.props.children}
         </div>
       </DefaultLayout>
