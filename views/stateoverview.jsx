@@ -30,6 +30,8 @@ class Page extends React.Component {
         <StatisticString entry={this.props.data.jurisdiction.fields.main_exports}/>
         <Divider label="Forest Status"/>
         <StatisticNumber entry={this.props.data.jurisdiction.fields.original_forest_area}/>
+        <StatisticNumber entry={this.props.data.jurisdiction.constants.forestArea}/>
+        <StatisticNumber entry={this.props.data.jurisdiction.constants.forestCarbon}/>
       </JurisdictionLayout>
     );
   }
