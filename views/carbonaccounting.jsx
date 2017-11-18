@@ -18,6 +18,7 @@ class Page extends React.Component {
     return (
       <JurisdictionLayout {...this.props}>
         <Divider label="Summary"/>
+        <StatisticNumber entry={this.props.data.jurisdiction.constants.forestCarbon}/>
         <Divider label="Reference Levels and Targets"/>
         <StatisticNumberAndYear entry={this.props.data.jurisdiction.fields.deforestation_reduction_goal}/>
         <StatisticNumberAndYear entry={this.props.data.jurisdiction.fields.tons_of_co2_avoided}/>
