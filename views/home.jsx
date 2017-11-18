@@ -1,7 +1,7 @@
 const React = require('react');
 const DefaultLayout = require('./layouts/default.jsx');
 
-class HelloMessage extends React.Component {
+class Page extends React.Component {
   render() {
     return (
       <DefaultLayout {...this.props}>
@@ -11,4 +11,4 @@ class HelloMessage extends React.Component {
   }
 }
 
-module.exports = HelloMessage;
+module.exports = Page;

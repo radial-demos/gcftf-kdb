@@ -1,7 +1,7 @@
 const React = require('react');
 const JurisdictionLayout = require('./layouts/jurisdiction.jsx');
 
-class HelloMessage extends React.Component {
+class Page extends React.Component {
   render() {
     return (
       <JurisdictionLayout {...this.props}>
@@ -11,4 +11,4 @@ class HelloMessage extends React.Component {
   }
 }
 
-module.exports = HelloMessage;
+module.exports = Page;
