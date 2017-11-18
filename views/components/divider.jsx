@@ -4,9 +4,10 @@ const React = require('react');
 
 class Component extends React.Component {
   render() {
+    const label = this.props.label || '';
     return (
       <h3 className="divider">
-        Section
+        {label && label}
       </h3>
     );
   }
