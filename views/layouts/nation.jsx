@@ -8,7 +8,6 @@ class Layout extends React.Component {
     return (
       <DefaultLayout {...this.props}>
         <div className="container container-full">
-          <div>NATIONAL STUFF</div>
           {this.props.children}
         </div>
       </DefaultLayout>
