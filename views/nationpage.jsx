@@ -8,8 +8,6 @@ const {
   StatisticString,
   StatisticContact,
   StatisticNumber,
-  StatisticNumberAndCurrency,
-  StatisticNumberAndYear,
 } = require('./components');
 
 class Page extends React.Component {
