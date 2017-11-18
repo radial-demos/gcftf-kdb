@@ -8,6 +8,7 @@ const StatisticNumberAndCurrency = require('./statistic-number_and_currency.jsx'
 const StatisticNumberAndYear = require('./statistic-number_and_year.jsx');
 const StatisticNumber = require('./statistic-number.jsx');
 const StatisticString = require('./statistic-string.jsx');
+const StatisticSelect = require('./statistic-select.jsx');
 
 module.exports = {
   Divider,
@@ -18,4 +19,5 @@ module.exports = {
   StatisticNumberAndYear,
   StatisticNumber,
   StatisticString,
+  StatisticSelect,
 };
