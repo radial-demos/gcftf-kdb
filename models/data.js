@@ -286,6 +286,7 @@ async function get(props) {
     }
   }
   const data = await getData(props, structureItem);
+  data.global = fieldDefs.global;
   // perform calculations
   if (data.nation) {
     data.nation.calculations = getCalculations(calcDefs.nation, data);
