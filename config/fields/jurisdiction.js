@@ -114,10 +114,10 @@ module.exports = {
     units: '%',
     isSorted: true,
     isPercent: true,
-    labels: {
-      '1': { label: 'Urban' },
-      '2': { label: 'Rural' },
-    },
+    labels: [
+      { id: '1', label: 'Urban' },
+      { id: '2', label: 'Rural' },
+    ],
   },
   social_groups_percent: {
     type: 'KDBSeries',
@@ -127,13 +127,13 @@ module.exports = {
     units: '%',
     isSorted: true,
     isPercent: true,
-    labels: {
-      a1: { label: 'Multi-ethnic' },
-      a2: { label: 'White' },
-      a3: { label: 'Black' },
-      a4: { label: 'Indigenous' },
-      a6: { label: 'Other' },
-    },
+    labels: [
+      { id: 'a1', label: 'Multi-ethnic' },
+      { id: 'a2', label: 'White' },
+      { id: 'a3', label: 'Black' },
+      { id: 'a4', label: 'Indigenous' },
+      { id: 'a6', label: 'Other' },
+    ],
   },
   gdp_breakdown_percent: {
     type: 'KDBSeries',
@@ -143,13 +143,13 @@ module.exports = {
     units: '%',
     isSorted: true,
     isPercent: true,
-    labels: {
-      '1': { label: 'Services' },
-      '2': { label: 'Agriculture' },
-      '3': { label: 'Forestry' },
-      '4': { label: 'Industry' },
-      '5': { label: 'Mining' },
-    },
+    labels: [
+      { id: '1', label: 'Services' },
+      { id: '2', label: 'Agriculture' },
+      { id: '3', label: 'Forestry' },
+      { id: '4', label: 'Industry' },
+      { id: '5', label: 'Mining' },
+    ],
   },
   current_forest_area_typologies: {
     type: 'KDBSeries',
@@ -159,16 +159,16 @@ module.exports = {
     units: 'km²',
     isSorted: true,
     isPercent: true,
-    labels: {
-      '1': { label: 'Upland Dense Humid Forest' },
-      '2': { label: 'Floodplain Forest' },
-      '3': { label: 'Upland/Transition Dry Forest' },
-      '4': { label: 'Savannah' },
-      '5': { label: 'Woodlands' },
-      '6': { label: 'Peat Forest' },
-      '7': { label: 'Wetlands' },
-      '8': { label: 'Mangroves' },
-    },
+    labels: [
+      { id: '1', label: 'Upland Dense Humid Forest' },
+      { id: '2', label: 'Floodplain Forest' },
+      { id: '3', label: 'Upland/Transition Dry Forest' },
+      { id: '4', label: 'Savannah' },
+      { id: '5', label: 'Woodlands' },
+      { id: '6', label: 'Peat Forest' },
+      { id: '7', label: 'Wetlands' },
+      { id: '8', label: 'Mangroves' },
+    ],
   },
   forest_management: {
     type: 'KDBSeries',
@@ -186,11 +186,11 @@ module.exports = {
     numberFormat: '.2f',
     units: '%',
     isSorted: true,
-    labels: {
-      '1': { label: 'Intact Forest Area' },
-      '2': { label: 'Deforested Area' },
-      '3': { label: 'Degraded Area' },
-    },
+    labels: [
+      { id: '1', label: 'Intact Forest Area' },
+      { id: '2', label: 'Deforested Area' },
+      { id: '3', label: 'Degraded Area' },
+    ],
   },
   governor: {
     type: 'KDBPerson',
@@ -211,92 +211,113 @@ module.exports = {
     numberFormat: ',.0f',
     units: 'km²',
     chartSpec: 'deforestation_rates',
-    labels: {
-      '1996': {
+    labels: [
+      {
+        id: '1996',
         oldId: '1',
         label: '1996',
       },
-      '1997': {
+      {
+        id: '1997',
         oldId: '2',
         label: '1997',
       },
-      '1998': {
+      {
+        id: '1998',
         oldId: '3',
         label: '1998',
       },
-      '1999': {
+      {
+        id: '1999',
         oldId: '4',
         label: '1999',
       },
-      '2000': {
+      {
+        id: '2000',
         oldId: '5',
         label: '2000',
       },
-      '2001': {
+      {
+        id: '2001',
         oldId: '6',
         label: '2001',
       },
-      '2002': {
+      {
+        id: '2002',
         oldId: '7',
         label: '2002',
       },
-      '2003': {
+      {
+        id: '2003',
         oldId: '8',
         label: '2003',
       },
-      '2004': {
+      {
+        id: '2004',
         oldId: '9',
         label: '2004',
       },
-      '2005': {
+      {
+        id: '2005',
         oldId: '10',
         label: '2005',
       },
-      '2006': {
+      {
+        id: '2006',
         oldId: '11',
         label: '2006',
       },
-      '2007': {
+      {
+        id: '2007',
         oldId: '12',
         label: '2007',
       },
-      '2008': {
+      {
+        id: '2008',
         oldId: '13',
         label: '2008',
       },
-      '2009': {
+      {
+        id: '2009',
         oldId: '14',
         label: '2009',
       },
-      '2010': {
+      {
+        id: '2010',
         oldId: '15',
         label: '2010',
       },
-      '2011': {
+      {
+        id: '2011',
         oldId: '16',
         label: '2011',
       },
-      '2012': {
+      {
+        id: '2012',
         oldId: '17',
         label: '2012',
       },
-      '2013': {
+      {
+        id: '2013',
         oldId: '18',
         label: '2013',
       },
-      '2014': {
+      {
+        id: '2014',
         oldId: '19',
         label: '2014',
       },
-      '2015': {
+      {
+        id: '2015',
         oldId: '20',
         label: '2015',
       },
-      '2016': {
+      {
+        id: '2016',
         oldId: '21',
         label: '2016',
       },
-    },
+    ],
   },
   are_current_deforestation_rates_known: {
     type: 'KDBSelect',
@@ -315,62 +336,5 @@ module.exports = {
       1: { label: 'No' },
       2: { label: 'Partially' },
     },
-  },
-  populationPercent: {
-    type: 'KDBNumber',
-    label: '% of National Population',
-    numberFormat: '.1f',
-    units: '%',
-    isDerived: true,
-  },
-  currentForestAreaPercent: {
-    type: 'KDBNumber',
-    label: '% of Land That Is Forest',
-    numberFormat: '.1f',
-    units: '%',
-    isDerived: true,
-    fn: (regionId, data) => { return 2; },
-  },
-  carbonPercentOfGlobal: {
-    type: 'KDBNumber',
-    label: '% of Global Total',
-    numberFormat: '.3f',
-    units: '%',
-    isDerived: true,
-  },
-  landAreaPercentOfNation: {
-    type: 'KDBNumber',
-    label: '',
-    numberFormat: '.1f',
-    units: '%',
-    isDerived: true,
-  },
-  nationalPercentForested: {
-    type: 'KDBNumber',
-    label: '',
-    numberFormat: '.1f',
-    units: '%',
-    isDerived: true,
-  },
-  totalAreaDeforested: {
-    type: 'KDBNumber',
-    label: 'Total Area Deforested',
-    numberFormat: ',.0f',
-    units: 'km²',
-    isDerived: true,
-  },
-  deforestationRateAverage: {
-    type: 'KDBNumberAndYear',
-    label: 'Average Deforestation Rate',
-    numberFormat: ',.1f',
-    units: 'km²',
-    isDerived: true,
-  },
-  deforestationTrend: {
-    type: 'KDBNumberAndYear',
-    label: 'Deforestation Trend',
-    numberFormat: '+,.1f',
-    units: '%',
-    isDerived: true,
   },
 };
