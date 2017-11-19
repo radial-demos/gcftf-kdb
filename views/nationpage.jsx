@@ -27,6 +27,7 @@ class Page extends React.Component {
         <Divider label="Overview"/>
         <StatisticNumber entry={this.props.data.nation.fields.national_land_area}/>
         <StatisticNumber entry={this.props.data.nation.fields.national_percent_forested}/>
+        <StatisticNumber entry={this.props.data.nation.calculations.deforestationTrend}/>
       </NationLayout>
     );
   }

@@ -17,7 +17,9 @@ class Page extends React.Component {
       <JurisdictionLayout {...this.props}>
         <Divider label="Summary"/>
         <StatisticNumber entry={this.props.data.jurisdiction.constants.forestCarbon}/>
+        <StatisticNumber entry={this.props.data.jurisdiction.calculations.carbonPercentOfGlobal}/>
         <Divider label="Reference Levels and Targets"/>
+        <StatisticNumber entry={this.props.data.jurisdiction.calculations.deforestationRateAverage}/>
         <StatisticNumber entry={this.props.data.jurisdiction.fields.deforestation_reduction_goal}/>
         <StatisticNumber entry={this.props.data.jurisdiction.fields.tons_of_co2_avoided}/>
         <Divider label="Deforestation Dynamics Monitoring"/>
