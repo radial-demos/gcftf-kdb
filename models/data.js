@@ -62,7 +62,7 @@ function populateDataStructure() {
 function getDefaultValueAttributes(fieldType) {
   const obj = {
     citation: { html: '' },
-    timestamp: ''
+    timestamp: '',
   };
   switch (fieldType) {
     case 'KDBText':
@@ -104,6 +104,7 @@ function getDefaultValueAttributes(fieldType) {
       //   initiativeType: { string: row.initiativeType },
       //   initiativeStatus: { string: row.initiativeStatus },
       // }
+      obj.values = [];
       break;
     default:
       debug(`Invalid field type '${fieldType}'`);
@@ -147,15 +148,7 @@ function getValueAttributes(field, fieldValueRecs = []) {
       obj.value = fieldValueRecs[0].value;
       break;
     case '[KDBInitiative]':
-      // {
-      //   name: { string: row.name },
-      //   description: { html: row.description.html },
-      //   partners: { string: row.partners },
-      //   fundingSource: { string: row.fundingSource },
-      //   fundingAmount: { string: row.fundingAmount.string },
-      //   initiativeType: { string: row.initiativeType },
-      //   initiativeStatus: { string: row.initiativeStatus },
-      // }
+      obj.values = fieldValueRecs[0].values;
       break;
     default:
       debug(`Invalid field type '${field.type}'`);
@@ -210,45 +203,30 @@ function getCalculations(defs, data) {
 }
 async function getData(props, structureItem) {
   const filterSpec = { nationId: props.nationId };
-  if (props.jurisdictionId) filterSpec.jurisdictionId = props.jurisdictionId;
   const valueRecs = await getValueRecs(filterSpec);
   const structureWithValues = _.cloneDeep(structureItem);
-  if (filterSpec.jurisdictionId) {
-    // this is just a jurisdiction -- only the jurisdiction is processed
-    if (!structureWithValues.fields) return structureWithValues; // early return OK
-    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
-      const fieldValueRecs = valueRecs.filter(r => (r.fieldId === fieldObj.id));
-      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
-      if (fieldObj.type === 'KDBSeries') {
-        if (!Array.isArray(fieldObj.labels)) return;
-        fieldObj.labels.forEach((labelObj) => {
-          const valueEntry = fieldObj.values.find(r => (r.id === labelObj.id));
-          if (!valueEntry) {
-            labelObj.amount = null;
-            return;
-          }
-          labelObj.amount = valueEntry.amount;
-        });
+
+  function assignAmountsToLabels(labels, values) {
+    if (!Array.isArray(labels)) return labels;
+    labels.forEach((labelObj) => {
+      const valueEntry = values.find(r => (r.id === labelObj.id));
+      if (!valueEntry) {
+        labelObj.amount = null;
+        return;
       }
+      labelObj.amount = valueEntry.amount;
     });
-    return { jurisdiction: structureWithValues };
+    return labels;
   }
-  // this is a nation -- nation must be processed and each child object in jurisdictions must be processed
+
+  // process nation and each child object in jurisdictions
   if (structureWithValues.fields) { // NO EARLY RETURN (jurisdictions must be processed too!)
     const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
     Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
       const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === fieldObj.id));
       Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
       if (fieldObj.type === 'KDBSeries') {
-        if (!Array.isArray(fieldObj.labels)) return;
-        fieldObj.labels.forEach((labelObj) => {
-          const valueEntry = fieldObj.values.find(r => (r.id === labelObj.id));
-          if (!valueEntry) {
-            labelObj.amount = null;
-            return;
-          }
-          labelObj.amount = valueEntry.amount;
-        });
+        fieldObj.labels = assignAmountsToLabels(fieldObj.labels, fieldObj.values);
       }
     });
   }
@@ -260,9 +238,12 @@ async function getData(props, structureItem) {
     Object.entries(jurisdiction.fields).forEach(([, fieldObj]) => {
       const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === fieldObj.id));
       Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
+      if (fieldObj.type === 'KDBSeries') {
+        fieldObj.labels = assignAmountsToLabels(fieldObj.labels, fieldObj.values);
+      }
     });
   });
-  return { nation: structureWithValues };
+  return structureWithValues;
 }
 /**
  * use 'dataFramework' with values merged from the database to return an object with all data entry definitions populated with values
@@ -270,22 +251,25 @@ async function getData(props, structureItem) {
  * @return {object}       All information (including field definitions and values) for requested nation or jurisdiction
  */
 async function get(props) {
+  const data = {};
   assertValidProps(props);
-  let structureItem = dataStructure.find(r => (r.id === props.nationId));
+  const structureItem = dataStructure.find(r => (r.id === props.nationId));
   if (!structureItem) {
     throw Error(`Nation not found. No nation with the id '${props.nationId}' has been defined in 'config/regions'.`);
   }
+  // include nation fields
+  data.nation = await getData(props, structureItem);
   if (props.jurisdictionId) {
     // try to find jurisdiction
-    if (!Array.isArray(structureItem.jurisdictions)) {
+    if (!Array.isArray(data.nation.jurisdictions)) {
       throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
     }
-    structureItem = structureItem.jurisdictions.find(r => (r.id === props.jurisdictionId));
-    if (!structureItem) {
+    // include reference to jurisdiction fields
+    data.jurisdiction = data.nation.jurisdictions.find(r => (r.id === props.jurisdictionId));
+    if (!data.jurisdiction) {
       throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
     }
   }
-  const data = await getData(props, structureItem);
   // include global fields
   data.global = fieldDefs.global;
   // include calculations
