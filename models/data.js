@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config();
-const debug = require('debug')('kdbx:model-data');
+const debug = require('debug')('kdb:model-data');
 
 debug('\x1Bc');
 
@@ -11,6 +11,7 @@ const _ = require('lodash');
 
 const regionDefs = require('../config/regions');
 const fieldDefs = require('../config/fields');
+const calcDefs = require('../config/calculations');
 
 const DB_URL = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:27017/${process.env.DB_NAME}`;
 
@@ -33,6 +34,10 @@ function mergeFields(defaults, overrides = {}) {
     if (!override) return;
     if (override.labels) {
       fieldDef.labels = override.labels;
+      // overrides are sometimes specified as key value pairs. Convert these to array with key as id property
+      if (!Array.isArray(fieldDef.labels)) {
+        fieldDef.labels = Object.entries(fieldDef.labels).map(([id, obj]) => Object.assign(obj, { id }));
+      }
     } else if (override.options) {
       fieldDef.options = override.options;
     }
@@ -77,6 +82,9 @@ function getDefaultValueAttributes(fieldType) {
       break;
     case 'KDBSelect':
       obj.value = { index: null };
+      break;
+    case 'KDBSeries':
+      obj.values = [];
       break;
     case 'KDBPerson':
       obj.value = {
@@ -132,6 +140,9 @@ function getValueAttributes(field, fieldValueRecs = []) {
     case 'KDBSelect':
       obj.value = fieldValueRecs[0].value;
       break;
+    case 'KDBSeries':
+      obj.values = fieldValueRecs[0].values;
+      break;
     case 'KDBPerson':
       obj.value = fieldValueRecs[0].value;
       break;
@@ -183,6 +194,76 @@ function assertValidProps(props) {
   }
   return true;
 }
+function getCalculations(defs, data) {
+  const calculations = {};
+  Object.entries(defs).forEach(([calcId, calcObj]) => {
+    calculations[calcId] = {};
+    Object.entries(calcObj).forEach(([fieldKey, fieldObj]) => {
+      if ((typeof fieldObj) === 'function') {
+        calculations[calcId][fieldKey] = fieldObj(data);
+      } else {
+        calculations[calcId][fieldKey] = _.cloneDeep(fieldObj);
+      }
+    });
+  });
+  return calculations;
+}
+async function getData(props, structureItem) {
+  const filterSpec = { nationId: props.nationId };
+  if (props.jurisdictionId) filterSpec.jurisdictionId = props.jurisdictionId;
+  const valueRecs = await getValueRecs(filterSpec);
+  const structureWithValues = _.cloneDeep(structureItem);
+  if (filterSpec.jurisdictionId) {
+    // this is just a jurisdiction -- only the jurisdiction is processed
+    if (!structureWithValues.fields) return structureWithValues; // early return OK
+    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
+      const fieldValueRecs = valueRecs.filter(r => (r.fieldId === fieldObj.id));
+      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
+      if (fieldObj.type === 'KDBSeries') {
+        if (!Array.isArray(fieldObj.labels)) return;
+        fieldObj.labels.forEach((labelObj) => {
+          const valueEntry = fieldObj.values.find(r => (r.id === labelObj.id));
+          if (!valueEntry) {
+            labelObj.amount = null;
+            return;
+          }
+          labelObj.amount = valueEntry.amount;
+        });
+      }
+    });
+    return { jurisdiction: structureWithValues };
+  }
+  // this is a nation -- nation must be processed and each child object in jurisdictions must be processed
+  if (structureWithValues.fields) { // NO EARLY RETURN (jurisdictions must be processed too!)
+    const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
+    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
+      const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === fieldObj.id));
+      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
+      if (fieldObj.type === 'KDBSeries') {
+        if (!Array.isArray(fieldObj.labels)) return;
+        fieldObj.labels.forEach((labelObj) => {
+          const valueEntry = fieldObj.values.find(r => (r.id === labelObj.id));
+          if (!valueEntry) {
+            labelObj.amount = null;
+            return;
+          }
+          labelObj.amount = valueEntry.amount;
+        });
+      }
+    });
+  }
+  // now process each jurisdiction
+  if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues; // early return OK
+  structureWithValues.jurisdictions.forEach((jurisdiction) => {
+    if (!jurisdiction.fields) return;
+    const jurisdictionValueRecs = valueRecs.filter(r => (r.jurisdictionId === jurisdiction.id));
+    Object.entries(jurisdiction.fields).forEach(([, fieldObj]) => {
+      const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === fieldObj.id));
+      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
+    });
+  });
+  return { nation: structureWithValues };
+}
 /**
  * use 'dataFramework' with values merged from the database to return an object with all data entry definitions populated with values
  * @param  {object} props key/value pairs specifying 'nationId' (required) and (optional) 'jurisdictionId'
@@ -204,38 +285,14 @@ async function get(props) {
       throw Error(`Jurisdiction not found. No jurisdiction within the nation '${props.nationId}' and with the id '${props.jurisdictionId}' has been defined in 'config/regions'.`);
     }
   }
-  const filterSpec = { nationId: props.nationId };
-  if (props.jurisdictionId) filterSpec.jurisdictionId = props.jurisdictionId;
-  const valueRecs = await getValueRecs(filterSpec);
-  const structureWithValues = _.cloneDeep(structureItem);
-  if (filterSpec.jurisdictionId) {
-    // this is just a jurisdiction -- only the jurisdiction is processed
-    if (!structureWithValues.fields) return structureWithValues; // early return OK
-    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
-      const fieldValueRecs = valueRecs.filter(r => (r.fieldId === fieldObj.id));
-      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
-    });
-    return { jurisdiction: structureWithValues };
+  const data = await getData(props, structureItem);
+  // perform calculations
+  if (data.nation) {
+    data.nation.calculations = getCalculations(calcDefs.nation, data);
+  } else if (data.jurisdiction) {
+    data.jurisdiction.calculations = getCalculations(calcDefs.jurisdiction, data);
   }
-  // this is a nation -- nation must be processed and each child object in jurisdictions must be processed
-  if (structureWithValues.fields) { // NO EARLY RETURN (jurisdictions must be processed too!)
-    const nationValueRecs = valueRecs.filter(r => (!r.jurisdictionId));
-    Object.entries(structureWithValues.fields).forEach(([, fieldObj]) => {
-      const fieldValueRecs = nationValueRecs.filter(r => (r.fieldId === fieldObj.id));
-      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
-    });
-  }
-  // now process each jurisdiction
-  if (!Array.isArray(structureWithValues.jurisdictions)) return structureWithValues; // early return OK
-  structureWithValues.jurisdictions.forEach((jurisdiction) => {
-    if (!jurisdiction.fields) return;
-    const jurisdictionValueRecs = valueRecs.filter(r => (r.jurisdictionId === jurisdiction.id));
-    Object.entries(jurisdiction.fields).forEach(([, fieldObj]) => {
-      const fieldValueRecs = jurisdictionValueRecs.filter(r => (r.fieldId === fieldObj.id));
-      Object.assign(fieldObj, getValueAttributes(fieldObj, fieldValueRecs));
-    });
-  });
-  return { nation: structureWithValues };
+  return data;
 }
 
 populateDataStructure();
