@@ -286,11 +286,13 @@ async function get(props) {
     }
   }
   const data = await getData(props, structureItem);
+  // include global fields
   data.global = fieldDefs.global;
-  // perform calculations
+  // include calculations
   if (data.nation) {
     data.nation.calculations = getCalculations(calcDefs.nation, data);
-  } else if (data.jurisdiction) {
+  }
+  if (data.jurisdiction) {
     data.jurisdiction.calculations = getCalculations(calcDefs.jurisdiction, data);
   }
   return data;
