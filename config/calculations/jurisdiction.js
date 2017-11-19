@@ -37,7 +37,23 @@ module.exports = {
     numberFormat: '.3f',
     units: '%',
     value: (data) => {
-      return { amount: 2 };
+      const value = { amount: null };
+      let forestCarbon = null;
+      let tropicalForestCarbonStocks = null;
+      if (data.jurisdiction.constants.forestCarbon && data.jurisdiction.constants.forestCarbon.value) {
+        forestCarbon = data.jurisdiction.constants.forestCarbon.value.amount;
+      }
+      if (data.global.constants.tropicalForestCarbonStocks && data.global.constants.tropicalForestCarbonStocks.value) {
+        tropicalForestCarbonStocks = data.global.constants.tropicalForestCarbonStocks.value.amount;
+      }
+      if ((tropicalForestCarbonStocks !== null) && (forestCarbon !== null)) {
+        value.amount = 100 * forestCarbon / tropicalForestCarbonStocks;
+      }
+      return value;
+
+
+      100 * jurisdictionData.forestCarbon.value.value / globalData.tropicalForestCarbonStocks.value.value;
+
     },
   },
   landAreaPercentOfNation: {
