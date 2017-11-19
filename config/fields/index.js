@@ -2,8 +2,10 @@
 
 const jurisdiction = require('./jurisdiction');
 const nation = require('./nation');
+const global = require('./global');
 
 module.exports = {
-  nation,
   jurisdiction,
+  nation,
+  global,
 };
